@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Expense Tracker Dashboard</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- PWA Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f6f8f6" media="(prefers-color-scheme: light)">
+    <link rel="apple-touch-icon" href="vertex_app_icon.png">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec13", // Neon Green
+                        "primary-dark": "#0a8a0a",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#050505", // Metallic Black
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#121212", // Dark Gray Surface
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        
+
+
+        .animate-enter { animation: enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes enter { from { opacity: 0; transform: translateY(20px) scale(0.99); filter: blur(4px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+
+        .material-symbols-outlined,
+        .material-symbols-filled {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-family: 'Material Symbols Outlined';
+            font-size: 24px;
+        }
+
+        .material-symbols-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+        .nav-item:hover {
+            transform: translateY(-2px);
+        }
+
+        /* View Transition Anchors */
+        nav {
+            view-transition-name: bottom-nav;
+        }
+
+        main {
+            view-transition-name: main-content;
+        }
+    </style>
+    <script>
+        if (localStorage.getItem('Vertex_theme') === 'dark' || (!('Vertex_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
+    <div
+        class="relative flex h-full min-h-screen w-full flex-col md:flex-row overflow-hidden max-w-md md:max-w-7xl mx-auto bg-background-light dark:bg-background-dark shadow-2xl md:shadow-none md:border-x border-slate-100 dark:border-white/5">
+
+        <!-- Desktop Sidebar Navigation -->
+        <aside class="hidden md:flex flex-col w-64 bg-white/50 dark:bg-surface-dark/30 backdrop-blur-md border-r border-slate-100 dark:border-white/5 p-6 h-screen sticky top-0 shrink-0">
+            <div class="flex items-center gap-3 mb-10">
+                <div class="bg-center bg-no-repeat bg-cover rounded-xl size-8" style="background-image: url('vertex_app_icon.png'); background-size: contain;"></div>
+                <h1 class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Vertex</h1>
+            </div>
+            <nav class="flex flex-col gap-2 flex-1">
+                <a href="#" class="flex items-center gap-3 p-3 rounded-xl bg-primary/10 text-primary-dark dark:text-primary font-bold transition-all relative overflow-hidden group">
+                    <span class="absolute inset-0 bg-primary/10 translate-y-full group-hover:translate-y-0 transition-transform"></span>
+                    <span class="material-symbols-filled text-2xl relative z-10">home</span>
+                    <span class="relative z-10">Dashboard</span>
+                </a>
+                <a href="add_expense.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all font-medium">
+                    <span class="material-symbols-outlined text-2xl">add_circle</span>
+                    Add Expense
+                </a>
+                <a href="history.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all font-medium">
+                    <span class="material-symbols-outlined text-2xl">history</span>
+                    History
+                </a>
+                <a href="settings.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all font-medium">
+                    <span class="material-symbols-outlined text-2xl">settings</span>
+                    Settings
+                </a>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-slate-100 dark:border-white/5">
+                <div class="flex items-center gap-3">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 ring-2 ring-primary/20" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmO6Ia_1gyZc9Pjh2V408TCQuJGcGq4eFJYfJ_2FJiCQZCyzfggK-kP61pKwZlyMDw_Tt6GUJvM9QOaccrwuXnUSMAHMPG-n-KF367vIfk3z6Mi7Em5I_MbKD-RM4cOWizAfUoT_sz8E6BbTDUf3v5pHGXzCc0WfWU0OHfqGBW8IADbBVShsP0rk2fJbEXqmpbOo6upuVxHWntTOdP4m-1hVRqUIjYiEW8bPWIPEdyobXjNu6qlF0wPwpw-Xk6z8ZU9qnRamVCsl8');"></div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Account</span>
+                        <span class="text-sm font-bold text-slate-900 dark:text-white desktop-user-name-display">User</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Mobile/Desktop Context Wrapper -->
+        <div class="flex-1 flex flex-col w-full h-full relative overflow-x-hidden">
+
+        <!-- Header -->
+        <header class="flex items-center justify-between p-6 pb-2 bg-background-light dark:bg-background-dark z-10">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 ring-2 ring-primary/20"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBmO6Ia_1gyZc9Pjh2V408TCQuJGcGq4eFJYfJ_2FJiCQZCyzfggK-kP61pKwZlyMDw_Tt6GUJvM9QOaccrwuXnUSMAHMPG-n-KF367vIfk3z6Mi7Em5I_MbKD-RM4cOWizAfUoT_sz8E6BbTDUf3v5pHGXzCc0WfWU0OHfqGBW8IADbBVShsP0rk2fJbEXqmpbOo6upuVxHWntTOdP4m-1hVRqUIjYiEW8bPWIPEdyobXjNu6qlF0wPwpw-Xk6z8ZU9qnRamVCsl8");'>
+                    </div>
+                    <div
+                        class="absolute bottom-0 right-0 size-3 bg-primary rounded-full border-2 border-background-light dark:border-background-dark">
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Welcome back,</span>
+                    <h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight" id="home-user-name">User
+                    </h2>
+                </div>
+            </div>
+            <button
+                class="flex items-center gap-1 bg-white dark:bg-surface-dark px-3 py-1.5 rounded-full shadow-sm border border-slate-100 dark:border-slate-700">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-200" id="current-month">Oct 2023</span>
+            </button>
+        </header>
+
+        <!-- Main Content with animation -->
+        <main class="flex-1 overflow-y-auto no-scrollbar scroll-smooth animate-enter pb-24 px-6 pt-4 md:pt-10 md:px-10 max-w-5xl md:mx-auto w-full">
+
+            <div class="md:grid md:grid-cols-3 md:gap-8 mb-8">
+            <!-- Total Balance Card -->
+            <div class="w-full bg-primary/10 dark:bg-primary/5 rounded-2xl p-6 mb-6 md:mb-0 md:col-span-1 relative overflow-hidden group hover:scale-[1.01] hover:shadow-lg transition-all duration-500 ease-out cursor-default">
+                <div class="absolute -right-6 -top-6 w-32 h-32 bg-primary/20 rounded-full blur-2xl"></div>
+                <div class="relative z-10 flex flex-col items-center text-center">
+                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Total Balance</p>
+                    <h1 class="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4"
+                        id="total-balance">$0.00</h1>
+                    <div class="flex w-full gap-4">
+                        <div
+                            class="flex-1 flex items-center justify-center gap-2 bg-white/60 dark:bg-surface-dark/60 backdrop-blur-sm p-3 rounded-xl shadow-sm border border-white/50 dark:border-white/10">
+                            <div
+                                class="size-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
+                                <span class="material-symbols-outlined text-lg">arrow_downward</span>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Income</p>
+                                <p class="text-sm font-bold text-slate-900 dark:text-white" id="total-income">+$4,000
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            class="flex-1 flex items-center justify-center gap-2 bg-white/60 dark:bg-surface-dark/60 backdrop-blur-sm p-3 rounded-xl shadow-sm border border-white/50 dark:border-white/10">
+                            <div
+                                class="size-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-500 dark:text-red-400">
+                                <span class="material-symbols-outlined text-lg">arrow_upward</span>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Expense</p>
+                                <p class="text-sm font-bold text-slate-900 dark:text-white" id="total-expense">-$0.00
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spending Analytics -->
+            <div class="p-6 py-4 md:bg-white md:dark:bg-surface-dark md:rounded-3xl md:shadow-soft md:border md:border-slate-100 md:dark:border-white/5 md:mb-0 hover:shadow-lg hover:-translate-y-1 transition-all duration-500 ease-out md:col-span-2">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-slate-900 dark:text-white text-lg font-bold">Spending Analysis</h3>
+                    <div
+                        class="flex items-center gap-1 bg-white dark:bg-surface-dark px-2 py-1 rounded-lg border border-slate-100 dark:border-white/5">
+                        <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400"
+                            id="current-month">Oct</span>
+                        <span class="material-symbols-outlined text-[12px] text-slate-400">expand_more</span>
+                    </div>
+                </div>
+                <!-- Chart Area -->
+                <div class="h-auto flex items-end gap-2 justify-between px-2" id="graph-bars">
+                    <!-- Bars injected by JS -->
+                </div>
+            </div>
+            </div> <!-- End md:grid -->
+
+            <!-- Recent Transactions -->
+            <div class="flex flex-col gap-4">
+                <h3 class="text-slate-900 dark:text-white text-lg font-bold px-6">Recent Transactions</h3>
+                <div id="recent-transactions-list" class="flex flex-col gap-3 px-6">
+                    <!-- Items injected by JS -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Navigation -->
+        <nav
+            class="md:hidden fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 dark:bg-surface-dark/90 backdrop-blur-lg border-t border-slate-100 dark:border-slate-800 py-3 px-6 pb-6 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] z-20">
+            <ul class="flex justify-between items-center">
+                <li>
+                    <a class="nav-item flex flex-col items-center gap-1 text-primary-dark dark:text-primary transition-colors"
+                        href="#">
+                        <span class="material-symbols-filled text-2xl">home</span>
+                        <span class="text-[10px] font-bold">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-item flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                        href="add_expense.html">
+                        <span class="material-symbols-outlined text-2xl">add_circle</span>
+                        <span class="text-[10px] font-medium">Add Expense</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-item flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                        href="history.html">
+                        <span class="material-symbols-outlined text-2xl">history</span>
+                        <span class="text-[10px] font-medium">History</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-item flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                        href="settings.html">
+                        <span class="material-symbols-outlined text-2xl">settings</span>
+                        <span class="text-[10px] font-medium">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        </div> <!-- End Mobile Content Wrapper -->
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const expenses = getExpenses();
+            // Use dynamic monthly income as "Income" reference
+            const income = getIncome();
+
+            // Set User Name
+            document.getElementById('home-user-name').textContent = getUser();
+            document.querySelectorAll('.desktop-user-name-display').forEach(el => el.textContent = getUser());
+
+            // 1. Calculate Totals
+            const totalExpense = expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+            const balance = income - totalExpense;
+
+            document.getElementById('total-balance').textContent = formatCurrency(balance);
+            document.getElementById('total-expense').textContent = '-' + formatCurrency(totalExpense);
+            // Display Dynamic Income
+            document.getElementById('total-income').textContent = '+' + formatCurrency(income);
+
+            // 2. Set Current Date
+            const now = new Date();
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            document.getElementById('current-month').textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+
+            // 3. Render Graph (Last 7 Days)
+            const graphContainer = document.getElementById('graph-bars');
+            const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            const todayIndex = now.getDay(); // 0-6
+
+            // Generate data for the last 7 days shifting so today is last
+            // Actually, design shows a static Mon-Sun week usually, or rolling window. 
+            // Let's do a fixed Mon-Sun week for simplicity, or just mapping to the names directly.
+            // Let's aggregate expenses by day of week for the current week.
+
+            const weeklyExpenses = [0, 0, 0, 0, 0, 0, 0]; // Sun to Sat
+            expenses.forEach(exp => {
+                const d = new Date(exp.date);
+                // Simple filter: check if within last 7 days (roughly) for rolling, or same week
+                // For this demo, let's just map all expenses to their day of week to show activity
+                weeklyExpenses[d.getDay()] += parseFloat(exp.amount);
+            });
+
+            // Find max for scaling
+            const maxExp = Math.max(...weeklyExpenses, 100); // Min max is 100 to avoid div by zero
+
+            // We want to order them Mon -> Sun as per UI
+            // 0=Sun, 1=Mon, ..., 6=Sat. UI: Mon(1), Tue(2)... Sat(6), Sun(0)
+            const order = [1, 2, 3, 4, 5, 6, 0];
+            const currencySymbol = getCurrencySymbol();
+
+            let graphHTML = '';
+            order.forEach(dayIndex => {
+                const amount = weeklyExpenses[dayIndex];
+                const heightPercent = Math.min((amount / maxExp) * 100, 100);
+                const isToday = dayIndex === todayIndex;
+
+                const barColorClass = isToday ? 'bg-primary shadow-[0_0_15px_rgba(19,236,19,0.4)]' : 'bg-primary/40';
+                // Tooltip logic could be added, here simplistic:
+
+                graphHTML += `
+                    <div class="flex flex-col items-center gap-2 flex-1 group cursor-pointer">
+                        <div class="relative w-full h-32 flex items-end justify-center">
+                            ${amount > 0 ? `
+                            <div class="absolute -top-8 bg-slate-800 text-white text-[10px] font-bold py-1 px-2 rounded transform -translate-y-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                ${currencySymbol}${Math.round(amount)}
+                            </div>` : ''}
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-t-md relative h-full overflow-hidden">
+                                <div class="absolute bottom-0 w-full ${barColorClass} rounded-t-md transition-all duration-500" style="height: ${Math.max(heightPercent, 5)}%;"></div>
+                            </div>
+                        </div>
+                        <span class="text-xs ${isToday ? 'text-slate-900 dark:text-white font-bold' : 'text-slate-400 font-medium'} group-hover:text-primary-dark transition-colors">${dayNames[dayIndex]}</span>
+                    </div>
+                `;
+            });
+            graphContainer.innerHTML = graphHTML;
+
+            // 4. Render Recent Transactions
+            const listContainer = document.getElementById('recent-transactions-list');
+            const sortedExpenses = [...expenses].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5); // Newest first, limit 5
+
+            if (sortedExpenses.length === 0) {
+                listContainer.innerHTML = '<p class="text-center text-slate-500 py-4">No transactions yet.</p>';
+            } else {
+                listContainer.innerHTML = sortedExpenses.map(exp => {
+                    // Category Icon Map
+                    const icons = { 'Food': 'restaurant', 'Transport': 'directions_bus', 'Shopping': 'shopping_bag', 'Home': 'home', 'Other': 'more_horiz' };
+                    const colors = { 'Food': 'text-orange-500 bg-orange-50 dark:bg-orange-900/20', 'Transport': 'text-blue-500 bg-blue-50 dark:bg-blue-900/20', 'Shopping': 'text-purple-500 bg-purple-50 dark:bg-purple-900/20', 'Home': 'text-green-500 bg-green-50 dark:bg-green-900/20', 'Other': 'text-slate-500 bg-slate-50 dark:bg-slate-900/20' };
+
+                    const icon = icons[exp.category] || 'payments';
+                    const colorClass = colors[exp.category] || colors['Other'];
+
+                    return `
+                    <div class="flex items-center justify-between p-4 bg-white dark:bg-surface-dark rounded-xl shadow-soft border border-slate-100 dark:border-slate-800">
+                        <div class="flex items-center gap-4">
+                            <div class="size-12 rounded-full flex items-center justify-center ${colorClass}">
+                                <span class="material-symbols-outlined">${icon}</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-slate-900 dark:text-white font-bold text-base">${exp.title}</span>
+                                <span class="text-slate-500 dark:text-slate-400 text-xs font-medium">${formatDate(exp.date)}</span>
+                            </div>
+                        </div>
+                        <span class="text-slate-900 dark:text-white font-bold text-base">-${formatCurrency(exp.amount)}</span>
+                    </div>
+                    `;
+                }).join('');
+            }
+        });
+    </script>
+</body>
+
+</html>
+
+

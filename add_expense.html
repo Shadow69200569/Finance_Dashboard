@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Add Expense - Expense Tracker</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- PWA Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f6f8f6" media="(prefers-color-scheme: light)">
+    <link rel="apple-touch-icon" href="vertex_app_icon.png">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec13", // Neon Green
+                        "primary-dark": "#0a8a0a",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#050505", // Metallic Black
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#121212", // Dark Gray Surface
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        
+        /* Enable View Transitions for smooth page loads */
+
+
+        /* Fallback / Additional Layout Animation */
+        .animate-enter {
+            animation: enter 0.4s ease-out;
+        }
+
+        @keyframes enter {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .material-symbols-outlined,
+        .material-symbols-filled {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-family: 'Material Symbols Outlined';
+            font-size: 24px;
+        }
+
+        .material-symbols-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+    <script>
+        if (localStorage.getItem('Vertex_theme') === 'dark' || (!('Vertex_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
+    <div
+        class="relative flex h-full min-h-screen w-full flex-col md:flex-row overflow-hidden max-w-md md:max-w-7xl mx-auto bg-background-light dark:bg-background-dark md:shadow-none shadow-2xl md:border-x border-slate-100 dark:border-white/5 animate-enter md:animate-none">
+
+        <!-- Desktop Sidebar Navigation -->
+        <aside class="hidden md:flex flex-col w-64 bg-white/50 dark:bg-surface-dark/30 backdrop-blur-md border-r border-slate-100 dark:border-white/5 p-6 h-screen sticky top-0 shrink-0">
+            <div class="flex items-center gap-3 mb-10">
+                <div class="bg-center bg-no-repeat bg-cover rounded-xl size-8" style="background-image: url('vertex_app_icon.png'); background-size: contain;"></div>
+                <h1 class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Vertex</h1>
+            </div>
+            <nav class="flex flex-col gap-2 flex-1">
+                <a href="dashboard.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all font-medium">
+                    <span class="material-symbols-outlined text-2xl">home</span>
+                    Dashboard
+                </a>
+                <a href="#" class="flex items-center gap-3 p-3 rounded-xl bg-primary/10 text-primary-dark dark:text-primary font-bold transition-all relative overflow-hidden group">
+                    <span class="absolute inset-0 bg-primary/10 translate-y-full group-hover:translate-y-0 transition-transform"></span>
+                    <span class="material-symbols-filled text-2xl relative z-10">add_circle</span>
+                    <span class="relative z-10">Add Expense</span>
+                </a>
+                <a href="history.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all font-medium">
+                    <span class="material-symbols-outlined text-2xl">history</span>
+                    History
+                </a>
+                <a href="settings.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all font-medium">
+                    <span class="material-symbols-outlined text-2xl">settings</span>
+                    Settings
+                </a>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-slate-100 dark:border-white/5">
+                <div class="flex items-center gap-3">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 ring-2 ring-primary/20" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmO6Ia_1gyZc9Pjh2V408TCQuJGcGq4eFJYfJ_2FJiCQZCyzfggK-kP61pKwZlyMDw_Tt6GUJvM9QOaccrwuXnUSMAHMPG-n-KF367vIfk3z6Mi7Em5I_MbKD-RM4cOWizAfUoT_sz8E6BbTDUf3v5pHGXzCc0WfWU0OHfqGBW8IADbBVShsP0rk2fJbEXqmpbOo6upuVxHWntTOdP4m-1hVRqUIjYiEW8bPWIPEdyobXjNu6qlF0wPwpw-Xk6z8ZU9qnRamVCsl8');"></div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Account</span>
+                        <span class="text-sm font-bold text-slate-900 dark:text-white desktop-user-name-display">User</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Mobile/Desktop Context Wrapper -->
+        <div class="flex-1 flex flex-col w-full h-full relative overflow-x-hidden md:animate-enter">
+
+        <!-- Header -->
+        <div
+            class="flex items-center p-4 justify-between sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+            <a href="dashboard.html"
+                class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                <span class="text-base font-medium">Cancel</span>
+            </a>
+            <h2
+                class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight absolute left-1/2 -translate-x-1/2">
+                Add Expense</h2>
+            <div class="w-12"></div>
+        </div>
+
+        <!-- Success Toast (Hidden by default) -->
+        <div id="success-toast"
+            class="hidden px-4 py-3 bg-green-500/10 border-b border-green-500/20 text-green-700 dark:text-green-400 flex items-center justify-between mb-2 absolute top-16 w-full z-20">
+            <div class="flex items-center gap-3">
+                <div class="bg-primary rounded-full p-1 text-black">
+                    <span class="material-symbols-outlined text-[16px] font-bold">check</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-sm font-bold">Expense Added!</span>
+                    <span class="text-xs opacity-90" id="toast-message">Running...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Content -->
+        <form id="add-expense-form" class="flex-1 flex flex-col pt-4 pb-24 w-full max-w-lg mx-auto md:pt-16">
+
+            <!-- Amount -->
+            <div class="flex flex-col items-center justify-center py-8 px-4">
+                <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Amount</p>
+                <div class="relative flex items-center justify-center">
+                    <span class="text-4xl font-bold text-slate-400 dark:text-slate-500 mr-2">$</span>
+                    <input autofocus="" id="amount" required step="0.01"
+                        class="w-full text-center bg-transparent border-none p-0 text-6xl font-extrabold text-slate-900 dark:text-white placeholder-slate-300 dark:placeholder-slate-700 focus:ring-0 outline-none"
+                        inputmode="decimal" placeholder="0.00" type="number" />
+                </div>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-8">
+                <h3 class="text-slate-900 dark:text-white text-base font-bold mb-4 px-4">Category</h3>
+                <!-- Hidden Radio Inputs -->
+                <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2 px-4 snap-x" id="category-container">
+
+                    <label class="cursor-pointer snap-start shrink-0">
+                        <input type="radio" name="category" value="Food" class="peer sr-only" checked>
+                        <div
+                            class="flex h-10 items-center justify-center gap-x-2 rounded-full border border-slate-100 dark:border-slate-700 bg-white dark:bg-surface-dark pl-5 pr-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:scale-105 hover:shadow-md hover:-translate-y-0.5 duration-200">
+                            <span class="material-symbols-outlined text-[20px]">restaurant</span>
+                            <p class="text-sm font-bold">Food</p>
+                        </div>
+                    </label>
+
+                    <label class="cursor-pointer snap-start shrink-0">
+                        <input type="radio" name="category" value="Transport" class="peer sr-only">
+                        <div
+                            class="flex h-10 items-center justify-center gap-x-2 rounded-full border border-slate-100 dark:border-slate-700 bg-white dark:bg-surface-dark pl-5 pr-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:scale-105 hover:shadow-md hover:-translate-y-0.5 duration-200">
+                            <span class="material-symbols-outlined text-[20px]">directions_bus</span>
+                            <p class="text-sm font-bold">Transport</p>
+                        </div>
+                    </label>
+
+                    <label class="cursor-pointer snap-start shrink-0">
+                        <input type="radio" name="category" value="Home" class="peer sr-only">
+                        <div
+                            class="flex h-10 items-center justify-center gap-x-2 rounded-full border border-slate-100 dark:border-slate-700 bg-white dark:bg-surface-dark pl-5 pr-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:scale-105 hover:shadow-md hover:-translate-y-0.5 duration-200">
+                            <span class="material-symbols-outlined text-[20px]">home</span>
+                            <p class="text-sm font-bold">Home</p>
+                        </div>
+                    </label>
+
+                    <label class="cursor-pointer snap-start shrink-0">
+                        <input type="radio" name="category" value="Shopping" class="peer sr-only">
+                        <div
+                            class="flex h-10 items-center justify-center gap-x-2 rounded-full border border-slate-100 dark:border-slate-700 bg-white dark:bg-surface-dark pl-5 pr-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:scale-105 hover:shadow-md hover:-translate-y-0.5 duration-200">
+                            <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+                            <p class="text-sm font-bold">Shopping</p>
+                        </div>
+                    </label>
+
+                    <label class="cursor-pointer snap-start shrink-0">
+                        <input type="radio" name="category" value="Other" class="peer sr-only">
+                        <div
+                            class="flex h-10 items-center justify-center gap-x-2 rounded-full border border-slate-100 dark:border-slate-700 bg-white dark:bg-surface-dark pl-5 pr-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:scale-105 hover:shadow-md hover:-translate-y-0.5 duration-200">
+                            <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                            <p class="text-sm font-bold">Other</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Date and Note -->
+            <div class="flex flex-col gap-4 px-4">
+
+                <!-- Date Picker -->
+                <div class="relative">
+                    <button type="button"
+                        class="flex items-center gap-4 bg-white dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 w-full hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
+                        <div
+                            class="text-primary bg-primary/10 rounded-lg p-2 shrink-0 flex items-center justify-center size-10">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                        </div>
+                        <div class="flex-1 text-left">
+                            <p class="text-slate-900 dark:text-white text-base font-semibold">Date</p>
+                        </div>
+                        <div class="shrink-0 flex items-center gap-1 text-slate-500 dark:text-slate-400">
+                            <p class="text-sm font-medium" id="date-display">Today</p>
+                            <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </div>
+                        <!-- Hidden Real Date Input overlaid -->
+                        <input type="date" id="date-input" required
+                            class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
+                    </button>
+                </div>
+
+                <!-- Note -->
+                <div
+                    class="flex items-start gap-4 bg-white dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 w-full min-h-[6rem]">
+                    <div
+                        class="text-slate-400 dark:text-slate-500 rounded-lg p-2 shrink-0 flex items-center justify-center size-10">
+                        <span class="material-symbols-outlined">edit_note</span>
+                    </div>
+                    <div class="flex-1 pt-2 h-full">
+                        <textarea id="note-input"
+                            class="w-full bg-transparent border-none p-0 text-base text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-0 resize-none h-full"
+                            placeholder="Add a note (optional)" rows="3"></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Save Button -->
+            <div
+                class="fixed md:static bottom-0 left-0 right-0 p-6 md:p-0 mt-8 bg-background-light dark:bg-background-dark/80 md:bg-transparent md:dark:bg-transparent backdrop-blur-md md:backdrop-blur-none border-t border-slate-100 dark:border-slate-800 md:border-none max-w-md mx-auto md:max-w-none z-10 transition-all duration-300">
+                <button type="submit"
+                    class="w-full flex items-center justify-center bg-slate-900 dark:bg-primary hover:scale-[1.02] text-white dark:text-slate-900 font-bold text-lg h-14 rounded-2xl shadow-lg shadow-slate-900/10 dark:shadow-primary/20 transition-all active:scale-[0.98]">
+                    Save Expense
+                </button>
+            </div>
+        </form>
+
+    </div>
+    </div> <!-- Close Desktop/Mobile split wrapper -->
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('date-input');
+            const dateDisplay = document.getElementById('date-display');
+
+            // Update user display in sidebar
+            document.querySelectorAll('.desktop-user-name-display').forEach(el => el.textContent = getUser());
+
+            // Set Default Date
+            const now = new Date();
+            const localStr = now.toISOString().split('T')[0];
+            dateInput.value = localStr;
+            updateDateDisplay(now);
+
+            // Set Currency Symbol
+            document.querySelector('.text-4xl.font-bold').textContent = getCurrencySymbol();
+
+            dateInput.addEventListener('change', (e) => {
+                const d = new Date(e.target.value);
+                updateDateDisplay(d);
+            });
+
+            function updateDateDisplay(dateObj) {
+                // Check if today
+                const today = new Date();
+                const isToday = dateObj.toDateString() === today.toDateString();
+
+                if (isToday) {
+                    const options = { month: 'short', day: 'numeric' };
+                    dateDisplay.textContent = `Today, ${dateObj.toLocaleDateString('en-US', options)}`;
+                } else {
+                    const options = { weekday: 'short', month: 'short', day: 'numeric' };
+                    dateDisplay.textContent = dateObj.toLocaleDateString('en-US', options);
+                }
+            }
+
+            // Form Submit Logic
+            document.getElementById('add-expense-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const amount = document.getElementById('amount').value;
+                if (!amount) return;
+
+                const category = document.querySelector('input[name="category"]:checked').value;
+                const note = document.getElementById('note-input').value; // Using Note as Title
+                const dateVal = document.getElementById('date-input').value;
+
+                // Create Expense Object
+                // Fallback title to category if note is empty
+                const title = note.trim() || category;
+
+                const expense = {
+                    id: Date.now(),
+                    amount: parseFloat(amount),
+                    category,
+                    title,
+                    date: new Date(dateVal).toISOString() // Store as ISO
+                };
+
+                saveExpense(expense);
+
+                // Show Success Animation
+                const toast = document.getElementById('success-toast');
+                const toastMsg = document.getElementById('toast-message');
+                toastMsg.textContent = `${category} • $${amount}`;
+
+                toast.classList.remove('hidden');
+                toast.classList.add('animate-bounce'); // Simple animation
+
+                // Delay redirect
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+
+</html>
+
+

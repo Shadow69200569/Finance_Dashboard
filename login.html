@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Login - Vertex Expense Tracker</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- PWA Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f6f8f6" media="(prefers-color-scheme: light)">
+    <link rel="apple-touch-icon" href="vertex_app_icon.png">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec13", // Neon Green
+                        "primary-dark": "#0a8a0a",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#050505", // Metallic Black
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#121212", // Dark Gray Surface
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        
+        /* Enable View Transitions */
+
+
+        .animate-enter {
+            animation: enter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes enter {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
+    <script>
+        // Force Dark Mode for Login Screen High Impact
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('Vertex_theme', 'dark');
+    </script>
+</head>
+
+<body
+    class="bg-background-dark font-display text-white antialiased overflow-hidden flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-md p-8 flex flex-col items-center animate-enter">
+
+        <!-- Logo -->
+        <div class="mb-8 relative group">
+            <div
+                class="absolute inset-0 bg-primary/20 blur-xl rounded-full group-hover:bg-primary/30 transition-all duration-500">
+            </div>
+            <img src="vertex_app_icon.png" alt="Vertex Logo"
+                class="relative w-24 h-24 rounded-2xl shadow-2xl shadow-primary/20 group-hover:scale-105 transition-transform duration-300">
+        </div>
+
+        <!-- Text -->
+        <h1 class="text-3xl font-extrabold text-white mb-2 tracking-tight">Welcome to Vertex</h1>
+        <p class="text-slate-400 text-center mb-10 text-sm">Your personal finance companion.<br>Simple, Fast, Secure.
+        </p>
+
+        <!-- Form -->
+        <form id="login-form" class="w-full flex flex-col gap-4">
+
+            <!-- Name Input -->
+            <div class="relative group">
+                <input type="text" id="username" required placeholder=" "
+                    class="peer w-full bg-surface-dark/50 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-white placeholder-transparent focus:border-primary focus:ring-0 transition-all outline-none" />
+                <label for="username" id="username-label"
+                    class="absolute left-4 top-4 text-slate-500 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-primary cursor-text">
+                    What's your name?
+                </label>
+            </div>
+
+            <!-- Password Input -->
+            <div class="relative group">
+                <input type="password" id="password" required placeholder=" "
+                    class="peer w-full bg-surface-dark/50 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-white placeholder-transparent focus:border-primary focus:ring-0 transition-all outline-none" />
+                <label for="password"
+                    class="absolute left-4 top-4 text-slate-500 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-primary cursor-text">
+                    Password
+                </label>
+            </div>
+
+            <!-- Forgot Password Link -->
+            <div class="flex justify-end px-1 -mt-2">
+                <button type="button" id="forgot-btn" class="text-xs text-slate-400 hover:text-white transition-colors">
+                    Forgot Password?
+                </button>
+            </div>
+
+            <!-- Confirm Password Input (Hidden by default) -->
+            <div class="relative group hidden" id="confirm-password-group">
+                <input type="password" id="confirm-password" placeholder=" "
+                    class="peer w-full bg-surface-dark/50 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-white placeholder-transparent focus:border-primary focus:ring-0 transition-all outline-none" />
+                <label for="confirm-password"
+                    class="absolute left-4 top-4 text-slate-500 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-primary cursor-text">
+                    Confirm Password
+                </label>
+            </div>
+
+            <!-- Remember Me -->
+            <div class="flex items-center gap-2 px-1">
+                <div class="relative flex items-center">
+                    <input type="checkbox" id="remember-me"
+                        class="peer h-4 w-4 cursor-pointer appearance-none rounded border border-slate-600 bg-surface-dark checked:border-primary checked:bg-primary transition-all">
+                    <span
+                        class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-black opacity-0 peer-checked:opacity-100">
+                        <span class="material-symbols-outlined text-[14px] font-bold">check</span>
+                    </span>
+                </div>
+                <label for="remember-me"
+                    class="cursor-pointer text-sm text-slate-400 select-none hover:text-white transition-colors">Remember
+                    me</label>
+            </div>
+
+            <button type="submit" id="submit-btn"
+                class="w-full bg-primary hover:bg-primary-dark text-black font-bold py-4 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all duration-200 mt-2">
+                Sign In
+            </button>
+        </form>
+
+        <!-- Toggle Sign Up -->
+        <p class="mt-6 text-sm text-slate-400">
+            <span id="toggle-text">Don't have an account?</span>
+            <button id="toggle-btn" class="text-white font-bold hover:text-primary transition-colors ml-1">Sign
+                Up</button>
+        </p>
+
+        <p class="mt-8 text-xs text-slate-600">No account needed. Data stored locally.</p>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // State
+        let isSignUp = false;
+
+        // Elements
+        const formTitle = document.querySelector('h1');
+        const submitBtn = document.getElementById('submit-btn');
+        const toggleBtn = document.getElementById('toggle-btn');
+        const toggleText = document.getElementById('toggle-text');
+        const forgotBtn = document.getElementById('forgot-btn');
+        const confirmPassGroup = document.getElementById('confirm-password-group');
+        const confirmPassInput = document.getElementById('confirm-password');
+        const nameInput = document.getElementById('username');
+
+        // Pre-fill Name if Registered
+        if (isRegistered()) {
+            nameInput.value = getUser();
+        }
+
+        // Toggle Function
+        function setSignUpMode(enabled) {
+            isSignUp = enabled;
+            if (isSignUp) {
+                formTitle.textContent = 'Create Account';
+                submitBtn.textContent = 'Sign Up';
+                toggleText.textContent = 'Already have an account?';
+                toggleBtn.textContent = 'Sign In';
+                confirmPassGroup.classList.remove('hidden');
+                confirmPassInput.setAttribute('required', 'true');
+                forgotBtn.classList.add('hidden'); // Hide forgot link in signup
+                nameInput.value = '';
+                nameInput.focus();
+            } else {
+                formTitle.textContent = 'Welcome to Vertex';
+                submitBtn.textContent = 'Sign In';
+                toggleText.textContent = "Don't have an account?";
+                toggleBtn.textContent = 'Sign Up';
+                confirmPassGroup.classList.add('hidden');
+                confirmPassInput.removeAttribute('required');
+                forgotBtn.classList.remove('hidden'); // Show forgot link in login
+                if (isRegistered()) nameInput.value = getUser();
+            }
+        }
+
+        // Toggle Listener
+        toggleBtn.addEventListener('click', () => {
+            setSignUpMode(!isSignUp);
+        });
+
+        // Forgot Password Listener
+        forgotBtn.addEventListener('click', () => {
+            if (!isRegistered()) {
+                alert("No account found on this device.");
+                return;
+            }
+
+            const confirmed = confirm(
+                "Vertex stores your data locally on your device, so we cannot recover your password.\n\n" +
+                "Would you like to RESET your account? This will DELETE ALL existing data and allow you to create a new account."
+            );
+
+            if (confirmed) {
+                localStorage.clear(); // Clear all data
+                alert("Account data has been cleared. You can now create a new account.");
+                // Switch to Sign Up mode
+                setSignUpMode(true);
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = nameInput.value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+
+            if (isSignUp) {
+                // --- SIGN UP FLOW ---
+                const confirmPass = confirmPassInput.value;
+
+                if (password !== confirmPass) {
+                    alert("Passwords do not match!");
+                    return;
+                }
+
+                if (isRegistered()) {
+                    const confirmOverwrite = confirm("An account already exists on this device. Creating a new account will DELETE all existing data. Continue?");
+                    if (!confirmOverwrite) return;
+
+                    // Clear existing data
+                    localStorage.removeItem(EXPENSES_KEY);
+                    localStorage.removeItem(PASSWORD_KEY);
+                }
+
+                attemptLogin(name, password, rememberMe);
+                window.location.href = 'dashboard.html';
+
+            } else {
+                // --- LOGIN FLOW ---
+                if (name && password) {
+                    const success = attemptLogin(name, password, rememberMe);
+
+                    if (success) {
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        // Shake animation
+                        const passInput = document.getElementById('password');
+                        passInput.classList.add('border-red-500');
+                        passInput.value = '';
+                        passInput.placeholder = 'Incorrect Password';
+                        passInput.focus();
+                        setTimeout(() => {
+                            passInput.classList.remove('border-red-500');
+                            passInput.placeholder = ' ';
+                        }, 1000);
+                    }
+                }
+            }
+        });
+
+        // Check availability
+        if (checkAuth()) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+
+</html>
+
+
