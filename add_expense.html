@@ -63,19 +63,21 @@
 
 
         /* Fallback / Additional Layout Animation */
+        @view-transition { navigation: auto; }
+
         .animate-enter {
-            animation: enter 0.4s ease-out;
+            animation: enter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes enter {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px) scale(0.98);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
@@ -111,9 +113,9 @@
 </head>
 
 <body
-    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
     <div
-        class="relative flex h-full min-h-screen w-full flex-col md:flex-row overflow-hidden max-w-md md:max-w-7xl mx-auto bg-background-light dark:bg-background-dark md:shadow-none shadow-2xl md:border-x border-slate-100 dark:border-white/5 animate-enter md:animate-none">
+        class="relative flex h-full min-h-screen w-full flex-col md:flex-row max-w-md md:max-w-7xl mx-auto bg-background-light dark:bg-background-dark md:shadow-none shadow-2xl md:border-x border-slate-100 dark:border-white/5 animate-enter md:animate-none">
 
         <!-- Desktop Sidebar Navigation -->
         <aside class="hidden md:flex flex-col w-64 bg-white/50 dark:bg-surface-dark/30 backdrop-blur-md border-r border-slate-100 dark:border-white/5 p-6 h-screen sticky top-0 shrink-0">
@@ -186,138 +188,140 @@
         </div>
 
         <!-- Form Content -->
-        <form id="add-expense-form" class="flex-1 flex flex-col pt-4 pb-24 w-full max-w-lg mx-auto md:pt-16">
+        <form id="add-expense-form" class="flex-1 flex flex-col w-full max-w-5xl mx-auto px-4 md:px-10 py-6 md:py-12">
+            
+            <div class="md:grid md:grid-cols-12 md:gap-12 items-start">
+                
+                <!-- ── Left Column: Amount & Category (md:col-span-7) ────────────── -->
+                <div class="md:col-span-7 flex flex-col gap-8">
+                    
+                    <!-- Amount Input Section -->
+                    <div class="bg-white dark:bg-surface-dark p-8 rounded-3xl shadow-soft border border-slate-100 dark:border-white/5 relative overflow-hidden group">
+                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+                        
+                        <p class="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-6">Enter Amount</p>
+                        
+                        <div class="flex flex-col items-center">
+                            <div class="relative flex items-center justify-center mb-8">
+                                <span class="text-4xl font-extrabold text-primary mr-3" id="currency-symbol-display">$</span>
+                                <input autofocus="" id="amount" required step="0.01"
+                                    class="w-48 md:w-64 text-center bg-transparent border-none p-0 text-6xl md:text-7xl font-extrabold text-slate-900 dark:text-white placeholder-slate-200 dark:placeholder-slate-800 focus:ring-0 outline-none"
+                                    inputmode="decimal" placeholder="0.00" type="number" />
+                            </div>
 
-            <!-- ── Amount Input ──────────────────────────────────────────────
-                 Large, centered number input for the expense amount.
-                 The currency symbol to the left is dynamically set from
-                 getCurrencySymbol() in app.js and updated on load.
-                 Uses inputmode="decimal" for the correct mobile keyboard.
-            ─────────────────────────────────────────────────────────────── -->
-            <div class="flex flex-col items-center justify-center py-8 px-4">
-                <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Amount</p>
-                <div class="relative flex items-center justify-center">
-                    <span class="text-4xl font-bold text-slate-400 dark:text-slate-500 mr-2">$</span>
-                    <input autofocus="" id="amount" required step="0.01"
-                        class="w-full text-center bg-transparent border-none p-0 text-6xl font-extrabold text-slate-900 dark:text-white placeholder-slate-300 dark:placeholder-slate-700 focus:ring-0 outline-none"
-                        inputmode="decimal" placeholder="0.00" type="number" />
-                </div>
-            </div>
-
-            <!-- ── Category Selector ──────────────────────────────────────────
-                 Horizontally scrollable pill-style radio group.
-                 Tailwind's 'peer' trick: the actual <input> is visually
-                 hidden (sr-only), and the sibling <div> reacts to
-                 peer-checked: to apply the active green style.
-                 Categories: Food, Transport, Home, Shopping, Other
-            ─────────────────────────────────────────────────────────────── -->
-            <div class="mb-8">
-                <h3 class="text-slate-900 dark:text-white text-base font-bold mb-4 px-4">Category</h3>
-                <!-- Hidden Radio Inputs -->
-                <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2 px-4 snap-x" id="category-container">
-
-                    <label class="cursor-pointer snap-start shrink-0">
-                        <input type="radio" name="category" value="Food" class="peer sr-only" checked>
-                        <div
-                            class="flex h-10 items-center justify-center gap-x-2 rounded-full border border-slate-100 dark:border-slate-700 bg-white dark:bg-surface-dark pl-5 pr-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:scale-105 hover:shadow-md hover:-translate-y-0.5 duration-200">
-                            <span class="material-symbols-outlined text-[20px]">restaurant</span>
-                            <p class="text-sm font-bold">Food</p>
+                            <!-- Quick Amount Buttons (Desktop Only) -->
+                            <div class="hidden md:flex flex-wrap justify-center gap-2">
+                                <button type="button" onclick="adjustAmount(10)" class="px-4 py-2 bg-slate-100 dark:bg-white/5 hover:bg-primary/20 dark:hover:bg-primary/20 hover:text-primary-dark dark:hover:text-primary rounded-xl text-sm font-bold transition-all">+10</button>
+                                <button type="button" onclick="adjustAmount(50)" class="px-4 py-2 bg-slate-100 dark:bg-white/5 hover:bg-primary/20 dark:hover:bg-primary/20 hover:text-primary-dark dark:hover:text-primary rounded-xl text-sm font-bold transition-all">+50</button>
+                                <button type="button" onclick="adjustAmount(100)" class="px-4 py-2 bg-slate-100 dark:bg-white/5 hover:bg-primary/20 dark:hover:bg-primary/20 hover:text-primary-dark dark:hover:text-primary rounded-xl text-sm font-bold transition-all">+100</button>
+                                <button type="button" onclick="adjustAmount(500)" class="px-4 py-2 bg-slate-100 dark:bg-white/5 hover:bg-primary/20 dark:hover:bg-primary/20 hover:text-primary-dark dark:hover:text-primary rounded-xl text-sm font-bold transition-all">+500</button>
+                                <button type="button" onclick="document.getElementById('amount').value = ''" class="px-4 py-2 bg-red-50 dark:bg-red-900/10 text-red-500 hover:bg-red-100 rounded-xl text-sm font-bold transition-all">Clear</button>
+                            </div>
                         </div>
-                    </label>
-
-                    <label class="cursor-pointer snap-start shrink-0">
-                        <input type="radio" name="category" value="Transport" class="peer sr-only">
-                        <div
-                            class="flex h-10 items-center justify-center gap-x-2 rounded-full border border-slate-100 dark:border-slate-700 bg-white dark:bg-surface-dark pl-5 pr-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:scale-105 hover:shadow-md hover:-translate-y-0.5 duration-200">
-                            <span class="material-symbols-outlined text-[20px]">directions_bus</span>
-                            <p class="text-sm font-bold">Transport</p>
-                        </div>
-                    </label>
-
-                    <label class="cursor-pointer snap-start shrink-0">
-                        <input type="radio" name="category" value="Home" class="peer sr-only">
-                        <div
-                            class="flex h-10 items-center justify-center gap-x-2 rounded-full border border-slate-100 dark:border-slate-700 bg-white dark:bg-surface-dark pl-5 pr-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:scale-105 hover:shadow-md hover:-translate-y-0.5 duration-200">
-                            <span class="material-symbols-outlined text-[20px]">home</span>
-                            <p class="text-sm font-bold">Home</p>
-                        </div>
-                    </label>
-
-                    <label class="cursor-pointer snap-start shrink-0">
-                        <input type="radio" name="category" value="Shopping" class="peer sr-only">
-                        <div
-                            class="flex h-10 items-center justify-center gap-x-2 rounded-full border border-slate-100 dark:border-slate-700 bg-white dark:bg-surface-dark pl-5 pr-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:scale-105 hover:shadow-md hover:-translate-y-0.5 duration-200">
-                            <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
-                            <p class="text-sm font-bold">Shopping</p>
-                        </div>
-                    </label>
-
-                    <label class="cursor-pointer snap-start shrink-0">
-                        <input type="radio" name="category" value="Other" class="peer sr-only">
-                        <div
-                            class="flex h-10 items-center justify-center gap-x-2 rounded-full border border-slate-100 dark:border-slate-700 bg-white dark:bg-surface-dark pl-5 pr-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:scale-105 hover:shadow-md hover:-translate-y-0.5 duration-200">
-                            <span class="material-symbols-outlined text-[20px]">more_horiz</span>
-                            <p class="text-sm font-bold">Other</p>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
-            <!-- ── Date Picker & Note ──────────────────────────────────────────
-                 Date Picker: A styled button with a hidden native
-                 <input type="date"> overlaid on top (opacity-0, z-10).
-                 The native picker handles the date selection UI and
-                 the button displays the formatted result (#date-display).
-
-                 Note: A textarea for an optional description. If left
-                 empty, the category name is used as the expense title.
-            ─────────────────────────────────────────────────────────────── -->
-            <div class="flex flex-col gap-4 px-4">
-
-                <!-- Date Picker -->
-                <div class="relative">
-                    <button type="button"
-                        class="flex items-center gap-4 bg-white dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 w-full hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
-                        <div
-                            class="text-primary bg-primary/10 rounded-lg p-2 shrink-0 flex items-center justify-center size-10">
-                            <span class="material-symbols-outlined">calendar_today</span>
-                        </div>
-                        <div class="flex-1 text-left">
-                            <p class="text-slate-900 dark:text-white text-base font-semibold">Date</p>
-                        </div>
-                        <div class="shrink-0 flex items-center gap-1 text-slate-500 dark:text-slate-400">
-                            <p class="text-sm font-medium" id="date-display">Today</p>
-                            <span class="material-symbols-outlined text-sm">chevron_right</span>
-                        </div>
-                        <!-- Hidden Real Date Input overlaid -->
-                        <input type="date" id="date-input" required
-                            class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
-                    </button>
-                </div>
-
-                <!-- Note -->
-                <div
-                    class="flex items-start gap-4 bg-white dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 w-full min-h-[6rem]">
-                    <div
-                        class="text-slate-400 dark:text-slate-500 rounded-lg p-2 shrink-0 flex items-center justify-center size-10">
-                        <span class="material-symbols-outlined">edit_note</span>
                     </div>
-                    <div class="flex-1 pt-2 h-full">
-                        <textarea id="note-input"
-                            class="w-full bg-transparent border-none p-0 text-base text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-0 resize-none h-full"
-                            placeholder="Add a note (optional)" rows="3"></textarea>
+
+                    <!-- Category Selector Section -->
+                    <div class="bg-white dark:bg-surface-dark p-8 rounded-3xl shadow-soft border border-slate-100 dark:border-white/5">
+                        <h3 class="text-slate-900 dark:text-white text-base font-bold mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">grid_view</span>
+                            Category
+                        </h3>
+                        
+                        <!-- Grid layout for desktop, scroll for mobile -->
+                        <div class="flex md:grid md:grid-cols-3 gap-3 overflow-x-auto md:overflow-visible no-scrollbar pb-2 md:pb-0 snap-x" id="category-container">
+                            
+                            <label class="cursor-pointer snap-start shrink-0 md:shrink">
+                                <input type="radio" name="category" value="Food" class="peer sr-only" checked>
+                                <div class="flex flex-col md:flex-row h-14 md:h-12 items-center justify-center gap-x-2 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-surface-dark/50 px-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:border-primary/50 duration-200">
+                                    <span class="material-symbols-outlined text-[20px]">restaurant</span>
+                                    <p class="text-sm font-bold">Food</p>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer snap-start shrink-0 md:shrink">
+                                <input type="radio" name="category" value="Transport" class="peer sr-only">
+                                <div class="flex flex-col md:flex-row h-14 md:h-12 items-center justify-center gap-x-2 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-surface-dark/50 px-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:border-primary/50 duration-200">
+                                    <span class="material-symbols-outlined text-[20px]">directions_bus</span>
+                                    <p class="text-sm font-bold">Transport</p>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer snap-start shrink-0 md:shrink">
+                                <input type="radio" name="category" value="Home" class="peer sr-only">
+                                <div class="flex flex-col md:flex-row h-14 md:h-12 items-center justify-center gap-x-2 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-surface-dark/50 px-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:border-primary/50 duration-200">
+                                    <span class="material-symbols-outlined text-[20px]">home</span>
+                                    <p class="text-sm font-bold">Home</p>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer snap-start shrink-0 md:shrink">
+                                <input type="radio" name="category" value="Shopping" class="peer sr-only">
+                                <div class="flex flex-col md:flex-row h-14 md:h-12 items-center justify-center gap-x-2 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-surface-dark/50 px-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:border-primary/50 duration-200">
+                                    <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+                                    <p class="text-sm font-bold">Shopping</p>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer snap-start shrink-0 md:shrink">
+                                <input type="radio" name="category" value="Other" class="peer sr-only">
+                                <div class="flex flex-col md:flex-row h-14 md:h-12 items-center justify-center gap-x-2 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-surface-dark/50 px-5 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all active:scale-95 shadow-sm hover:border-primary/50 duration-200">
+                                    <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                                    <p class="text-sm font-bold">Other</p>
+                                </div>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-            </div>
+                <!-- ── Right Column: Date, Note & Save (md:col-span-5) ───────────── -->
+                <div class="md:col-span-5 flex flex-col gap-6 md:sticky md:top-24 mt-8 md:mt-0">
+                    
+                    <!-- Date Picker Card -->
+                    <div class="bg-white dark:bg-surface-dark p-6 rounded-3xl shadow-soft border border-slate-100 dark:border-white/5 relative">
+                        <h3 class="text-slate-900 dark:text-white text-sm font-bold mb-4 flex items-center gap-2">
+                             <span class="material-symbols-outlined text-primary text-lg">calendar_month</span>
+                             Transaction Date
+                        </h3>
+                        <div class="relative">
+                            <div
+                                class="flex items-center gap-4 bg-slate-50 dark:bg-background-dark/50 p-4 rounded-2xl border border-slate-100 dark:border-white/5 w-full hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group cursor-pointer">
+                                <div class="text-primary bg-primary/10 rounded-lg p-2 shrink-0 flex items-center justify-center size-10">
+                                    <span class="material-symbols-outlined">event</span>
+                                </div>
+                                <div class="flex-1 text-left">
+                                    <p class="text-slate-900 dark:text-white text-base font-bold" id="date-display">Today</p>
+                                </div>
+                                <span class="material-symbols-outlined text-slate-400">expand_more</span>
+                                <input type="date" id="date-input" required class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- Save Button -->
-            <div
-                class="fixed md:static bottom-0 left-0 right-0 p-6 md:p-0 mt-8 bg-background-light dark:bg-background-dark/80 md:bg-transparent md:dark:bg-transparent backdrop-blur-md md:backdrop-blur-none border-t border-slate-100 dark:border-slate-800 md:border-none max-w-md mx-auto md:max-w-none z-10 transition-all duration-300">
-                <button type="submit"
-                    class="w-full flex items-center justify-center bg-slate-900 dark:bg-primary hover:scale-[1.02] text-white dark:text-slate-900 font-bold text-lg h-14 rounded-2xl shadow-lg shadow-slate-900/10 dark:shadow-primary/20 transition-all active:scale-[0.98]">
-                    Save Expense
-                </button>
+                    <!-- Note Card -->
+                    <div class="bg-white dark:bg-surface-dark p-6 rounded-3xl shadow-soft border border-slate-100 dark:border-white/5 h-full">
+                        <h3 class="text-slate-900 dark:text-white text-sm font-bold mb-4 flex items-center gap-2">
+                             <span class="material-symbols-outlined text-primary text-lg">description</span>
+                             Add a Description
+                        </h3>
+                        <div class="bg-slate-50 dark:bg-background-dark/50 p-4 rounded-2xl border border-slate-100 dark:border-white/5 h-[140px] md:h-[180px]">
+                            <textarea id="note-input"
+                                class="w-full h-full bg-transparent border-none p-0 text-base text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:ring-0 resize-none font-medium"
+                                placeholder="What was this for? (e.g. Weekly Groceries)"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="fixed md:static inset-x-0 bottom-0 p-6 md:p-0 bg-white/80 dark:bg-background-dark/80 md:bg-transparent backdrop-blur-lg md:backdrop-blur-none border-t md:border-none border-slate-100 dark:border-white/5 z-20 transition-all">
+                        <button type="submit"
+                            class="w-full flex items-center justify-center bg-slate-900 dark:bg-primary hover:scale-[1.02] text-white dark:text-slate-900 font-bold text-lg h-16 rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-primary/20 transition-all active:scale-[0.98]">
+                            Record Expense
+                        </button>
+                        <p class="hidden md:block text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-3">
+                            Pro Tip: Press <span class="bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded mx-1">Ctrl + Enter</span> to save instantly
+                        </p>
+                    </div>
+
+                </div>
             </div>
         </form>
 
@@ -340,7 +344,23 @@
             updateDateDisplay(now);
 
             // Set Currency Symbol
-            document.querySelector('.text-4xl.font-bold').textContent = getCurrencySymbol();
+            const symbol = getCurrencySymbol();
+            document.getElementById('currency-symbol-display').textContent = symbol;
+
+            // --- Quick Amount Adjustment ---
+            window.adjustAmount = function(val) {
+                const amountEl = document.getElementById('amount');
+                const current = parseFloat(amountEl.value || 0);
+                amountEl.value = (current + val).toFixed(2);
+                amountEl.dispatchEvent(new Event('input')); // Trigger any input listeners
+            };
+
+            // --- Keyboard Shortcut (Ctrl+Enter) ---
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    document.getElementById('add-expense-form').requestSubmit();
+                }
+            });
 
             dateInput.addEventListener('change', (e) => {
                 const d = new Date(e.target.value);

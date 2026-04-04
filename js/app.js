@@ -124,7 +124,7 @@ function logout() {
     if (confirm('Are you sure you want to log out?')) {
         localStorage.removeItem(SESSION_KEY);
         sessionStorage.removeItem(SESSION_KEY);
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 }
 
@@ -324,11 +324,14 @@ function formatDate(dateString) {
 // ═══════════════════════════════════════════════════════════════
 
 /**
- * exportExpensesToExcel()
- * ───────────────────────
- * Creates an XLS-compatible HTML table string from all stored expenses,
- * wraps it in a Blob, and triggers a browser file download.
- * The file is named: Vertex_export_YYYY-MM-DD.xls
+ * exportExpensesToCSV()
+ * ─────────────────────
+ * Creates a proper RFC 4180-compliant CSV file from all stored expenses
+ * and triggers a browser download. Opens correctly in Excel, Google Sheets,
+ * LibreOffice, and any other spreadsheet application.
+ * The file is named: Vertex_export_YYYY-MM-DD.csv
+ *
+ * Includes a UTF-8 BOM (\uFEFF) so Excel auto-detects the encoding.
  */
 function exportExpensesToExcel() {
     const expenses = getExpenses();
@@ -340,87 +343,73 @@ function exportExpensesToExcel() {
     }
 
     const currency = getCurrency();
-    const date = new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
-    const filename = `Vertex_export_${date}.xls`;
+    const exportDate = new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
+    const filename = `Vertex_export_${exportDate}.csv`;
 
-    // Build the HTML table string — Excel reads this format
-    let table = `
-        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-        <head>
-            <!--[if gte mso 9]>
-            <xml>
-                <x:ExcelWorkbook>
-                    <x:ExcelWorksheets>
-                        <x:ExcelWorksheet>
-                            <x:Name>Expenses</x:Name>
-                            <x:WorksheetOptions>
-                                <x:DisplayGridlines/>
-                            </x:WorksheetOptions>
-                        </x:ExcelWorksheet>
-                    </x:ExcelWorksheets>
-                </x:ExcelWorkbook>
-            </xml>
-            <![endif]-->
-            <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
-        </head>
-        <body>
-            <table border="1">
-                <thead>
-                    <!-- Header row styled with Vertex's neon green brand color -->
-                    <tr style="background-color: #13ec13; color: white; font-weight: bold;">
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Amount</th>
-                        <th>Currency</th>
-                    </tr>
-                </thead>
-                <tbody>
-    `;
+    // Helper: wrap a cell value in quotes and escape any internal quotes
+    function csvCell(value) {
+        const str = String(value ?? '').replace(/"/g, '""');
+        return `"${str}"`;
+    }
 
-    // Add one row per expense
-    expenses.forEach(exp => {
-        table += `
-            <tr>
-                <td>${exp.id}</td>
-                <td>${new Date(exp.date).toLocaleDateString()}</td>
-                <td>${exp.title}</td>
-                <td>${exp.category}</td>
-                <td>${exp.amount}</td>
-                <td>${currency}</td>
-            </tr>
-        `;
+    // Header row
+    const headers = ['Date', 'Title', 'Category', 'Amount', 'Currency'];
+    const rows = [headers.map(csvCell).join(',')];
+
+    // Sort by date descending (newest first)
+    const sorted = [...expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Data rows
+    sorted.forEach(exp => {
+        const formattedDate = new Date(exp.date).toLocaleDateString('en-GB'); // DD/MM/YYYY
+        rows.push([
+            csvCell(formattedDate),
+            csvCell(exp.title),
+            csvCell(exp.category),
+            csvCell(parseFloat(exp.amount).toFixed(2)),
+            csvCell(currency)
+        ].join(','));
     });
 
-    table += `
-                </tbody>
-            </table>
-        </body>
-        </html>
-    `;
+    // UTF-8 BOM + CSV content
+    const csvContent = '\uFEFF' + rows.join('\r\n');
 
-    // Create a Blob from the HTML string, create a temporary link, and click it
-    const blob = new Blob([table], { type: 'application/vnd.ms-excel' });
+    // Trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = filename;
     document.body.appendChild(link);
-    link.click();                        // Trigger download
-    document.body.removeChild(link);     // Clean up the DOM
-    URL.revokeObjectURL(url);            // Free memory
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 }
 
 
 // ═══════════════════════════════════════════════════════════════
-//  GLOBAL AUTH GUARD
-//  Runs on every page EXCEPT login.html.
-//  If no valid session is found, redirect to the login page.
-//  This prevents direct URL access to protected pages.
+//  GLOBAL AUTH GUARD & SMOOTH NAV
 // ═══════════════════════════════════════════════════════════════
-if (!window.location.pathname.includes('login.html')) {
+if (!window.location.pathname.includes('index.html')) {
     if (!checkAuth()) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 }
+
+// ── Link Prefetching for Smoother Navigation ──
+// Detects hover on navigation links and prefetches the target page.
+document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.querySelectorAll('a[href$=".html"]');
+    navLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            const path = link.getAttribute('href');
+            // Don't prefetch current page or logout
+            if (path && !window.location.pathname.includes(path) && !path.includes('logout')) {
+                const prefetch = document.createElement('link');
+                prefetch.rel = 'prefetch';
+                prefetch.href = path;
+                document.head.appendChild(prefetch);
+            }
+        }, { once: true }); // Only prefetch once per link per session
+    });
+});

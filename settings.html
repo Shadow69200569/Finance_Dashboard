@@ -63,20 +63,28 @@
 
 
         /* Fallback / Additional Layout Animation */
+        @view-transition {
+            navigation: auto;
+        }
+
         .animate-enter {
-            animation: enter 0.4s ease-out;
+            animation: enter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes enter {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px) scale(0.98);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
+        }
+
+        main {
+            view-transition-name: main-content;
         }
 
         .material-symbols-outlined,
@@ -133,9 +141,9 @@
 </head>
 
 <body
-    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
     <div
-        class="relative flex h-full min-h-screen w-full flex-col md:flex-row overflow-hidden max-w-md md:max-w-7xl mx-auto bg-background-light dark:bg-background-dark shadow-2xl md:shadow-none md:border-x border-slate-100 dark:border-white/5 md:animate-none">
+        class="relative flex h-full min-h-screen w-full flex-col md:flex-row max-w-md md:max-w-7xl mx-auto bg-background-light dark:bg-background-dark shadow-2xl md:shadow-none md:border-x border-slate-100 dark:border-white/5 md:animate-none">
 
         <!-- Desktop Sidebar Navigation -->
         <aside class="hidden md:flex flex-col w-64 bg-white/50 dark:bg-surface-dark/30 backdrop-blur-md border-r border-slate-100 dark:border-white/5 p-6 h-screen sticky top-0 shrink-0">
@@ -178,211 +186,235 @@
 
         <!-- Header -->
         <div
-            class="sticky top-0 z-20 flex items-center bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm p-4 justify-between border-b border-slate-100 dark:border-white/5">
+            class="sticky top-0 z-20 flex items-center bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm p-4 md:p-8 justify-between border-b md:border-none border-slate-100 dark:border-white/5">
             <a href="dashboard.html"
-                class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 transition-colors">
+                class="md:hidden flex items-center justify-center w-10 h-10 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 transition-colors">
                 <span class="material-symbols-outlined text-slate-900 dark:text-white">arrow_back_ios_new</span>
             </a>
             <h2
-                class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center">
+                class="text-slate-900 dark:text-white text-2xl md:text-3xl font-extrabold leading-tight tracking-tight flex-1 text-center md:text-left">
                 Settings</h2>
-            <button class="text-primary font-bold text-sm hover:opacity-80 transition-opacity">Done</button>
+            <button onclick="window.location.href='dashboard.html'" class="md:hidden text-primary font-bold text-sm hover:opacity-80 transition-opacity">Done</button>
         </div>
 
-        <!-- Scrollable Content -->
-        <main class="flex-1 overflow-y-auto no-scrollbar pb-24 animate-enter md:pt-8 w-full max-w-3xl mx-auto">
-            <div class="p-4 pt-6 md:px-6">
-                <!-- Profile Card -->
-                <div
-                    class="bg-white dark:bg-surface-dark rounded-2xl p-4 shadow-soft border border-slate-100 dark:border-white/5 flex items-center justify-between group cursor-pointer hover:shadow-md transition-all">
-                    <div class="flex items-center gap-4">
+        <!-- content -->
+        <main class="flex-1 overflow-y-auto no-scrollbar pb-24 animate-enter w-full max-w-6xl mx-auto px-4 md:px-10">
+            
+            <div class="md:grid md:grid-cols-12 md:gap-8 items-start pt-2 md:pt-4">
+                
+                <!-- ── Profile Section (md:col-span-12) ────────────────────────── -->
+                <div class="col-span-12 mb-8 items-center bg-white dark:bg-surface-dark rounded-3xl p-6 md:p-8 shadow-soft border border-slate-100 dark:border-white/5 flex flex-col md:flex-row justify-between group cursor-pointer hover:shadow-xl transition-all relative overflow-hidden">
+                    <div class="absolute -right-20 -top-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 flex flex-col md:flex-row items-center gap-6">
                         <div class="relative">
-                            <div class="bg-center bg-no-repeat bg-cover rounded-full size-16 shadow-inner"
+                            <div class="bg-center bg-no-repeat bg-cover rounded-full size-24 md:size-28 shadow-2xl ring-4 ring-primary/10"
                                 style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBmO6Ia_1gyZc9Pjh2V408TCQuJGcGq4eFJYfJ_2FJiCQZCyzfggK-kP61pKwZlyMDw_Tt6GUJvM9QOaccrwuXnUSMAHMPG-n-KF367vIfk3z6Mi7Em5I_MbKD-RM4cOWizAfUoT_sz8E6BbTDUf3v5pHGXzCc0WfWU0OHfqGBW8IADbBVShsP0rk2fJbEXqmpbOo6upuVxHWntTOdP4m-1hVRqUIjYiEW8bPWIPEdyobXjNu6qlF0wPwpw-Xk6z8ZU9qnRamVCsl8");'>
                             </div>
                             <div
-                                class="absolute bottom-0 right-0 bg-primary rounded-full p-1 border-2 border-white dark:border-surface-dark">
-                                <span class="material-symbols-outlined text-[12px] text-black font-bold">edit</span>
+                                class="absolute bottom-1 right-1 bg-primary rounded-full p-2 border-4 border-white dark:border-surface-dark shadow-lg">
+                                <span class="material-symbols-outlined text-[14px] text-black font-bold">edit</span>
                             </div>
                         </div>
-                        <div class="flex flex-col justify-center">
-                            <p class="text-slate-900 dark:text-white text-lg font-bold leading-tight"
-                                id="user-name-display">User</p>
-                            <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Personal Account</p>
-                        </div>
-                    </div>
-                    <span class="material-symbols-outlined text-slate-400">chevron_right</span>
-                </div>
-            </div>
-
-            <!-- Preferences -->
-            <div class="px-4 pt-2">
-                <h3
-                    class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider px-2 pb-2 ml-2">
-                    Preferences</h3>
-                <div
-                    class="bg-white dark:bg-surface-dark rounded-2xl overflow-hidden shadow-soft border border-slate-100 dark:border-white/5 divide-y divide-slate-100 dark:divide-white/5">
-
-                    <!-- ── Currency Row ────────────────────────────────────────────────
-                         A styled row with a hidden <select> overlaid.
-                         The <select> is transparent (opacity-0) but covers
-                         the entire row so clicking anywhere opens the dropdown.
-                         The currently selected option is shown in #currency-display.
-                    ─────────────────────────────────────────────────────────────── -->
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="size-8 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
-                                <span
-                                    class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-[20px]">attach_money</span>
-                            </div>
-                            <p class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate">Currency</p>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <!-- Dynamic Currency Text -->
-                            <span class="text-slate-500 dark:text-slate-200 text-sm font-medium"
-                                id="currency-display">USD ($)</span>
-                            <span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
-                        </div>
-                        <!-- Hidden Select Overlay with explicit theme colors for popup -->
-                        <select id="currency-select"
-                            class="absolute inset-0 opacity-0 cursor-pointer w-full h-full bg-white dark:bg-zinc-800 text-slate-900 dark:text-white">
-                            <option class="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white" value="USD">USD ($)
-                            </option>
-                            <option class="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white" value="EUR">EUR (€)
-                            </option>
-                            <option class="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white" value="GBP">GBP (£)
-                            </option>
-                            <option class="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white" value="INR">INR (₹)
-                            </option>
-                            <option class="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white" value="JPY">JPY (¥)
-                            </option>
-                            <option class="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white" value="CAD">CAD ($)
-                            </option>
-                            <option class="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white" value="AUD">AUD ($)
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="flex items-center gap-4 px-4 py-4 justify-between">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="size-8 rounded-full bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center">
-                                <span
-                                    class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-[20px]">dark_mode</span>
-                            </div>
-                            <p class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate">Dark Mode
+                        <div class="flex flex-col text-center md:text-left">
+                            <h2 class="text-slate-900 dark:text-white text-3xl font-black tracking-tight"
+                                id="user-name-display">User</h2>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm font-bold uppercase tracking-widest mt-1">Vertex Personal Account</p>
+                            <p class="text-primary text-xs font-bold mt-2 flex items-center justify-center md:justify-start gap-1">
+                                <span class="material-symbols-outlined text-[14px] font-bold">verified</span>
+                                Verified Profile
                             </p>
                         </div>
-                        <div class="shrink-0">
-                            <label
-                                class="relative flex h-[30px] w-[50px] cursor-pointer items-center rounded-full border-none bg-slate-200 dark:bg-slate-700 p-1 transition-all has-[:checked]:bg-primary has-[:checked]:justify-end">
-                                <input id="dark-mode-toggle" class="peer invisible absolute" type="checkbox" />
-                                <div
-                                    class="h-[22px] w-[22px] rounded-full bg-white shadow-sm transition-all peer-checked:mr-0 peer-checked:ml-[20px]">
+                    </div>
+                </div>
+
+                <!-- ── Column 1: Preferences (md:col-span-4) ────────────────────── -->
+                <div class="md:col-span-4 flex flex-col gap-8">
+                    <div class="flex flex-col gap-4">
+                        <h3 class="text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] ml-2">App Preferences</h3>
+                        <div class="bg-white dark:bg-surface-dark rounded-3xl overflow-hidden shadow-soft border border-slate-100 dark:border-white/5 divide-y divide-slate-100 dark:divide-white/5">
+                            
+                            <!-- Currency -->
+                            <div id="currency-row" class="relative flex items-center gap-4 px-6 py-5 justify-between group hover:bg-slate-50 dark:hover:bg-white/5 transition-colors border-b border-slate-100 dark:border-white/5 cursor-pointer">
+                                <div class="flex items-center gap-4">
+                                    <div class="size-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-[22px]">payments</span>
+                                    </div>
+                                    <p class="text-slate-900 dark:text-white text-base font-bold">Currency</p>
                                 </div>
-                            </label>
+                                <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 font-bold overflow-hidden">
+                                    <span id="currency-display" class="text-sm">USD ($)</span>
+                                    <span class="material-symbols-outlined text-[20px] transition-transform group-hover:translate-x-1">chevron_right</span>
+                                </div>
+                            </div>
+
+                            <!-- Dark Mode -->
+                            <div class="flex items-center gap-4 px-6 py-5 justify-between group hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <div class="size-10 rounded-xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-[22px]">dark_mode</span>
+                                    </div>
+                                    <p class="text-slate-900 dark:text-white text-base font-bold">Interface</p>
+                                </div>
+                                <label class="relative flex h-[32px] w-[54px] cursor-pointer items-center rounded-full bg-slate-100 dark:bg-slate-800 p-1 transition-all has-[:checked]:bg-primary">
+                                    <input id="dark-mode-toggle" class="peer invisible absolute" type="checkbox" />
+                                    <div class="h-[24px] w-[24px] rounded-full bg-white shadow-xl transition-all peer-checked:translate-x-[22px]"></div>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Financial Goals -->
-            <div class="px-4 pt-6">
-                <h3
-                    class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider px-2 pb-2 ml-2">
-                    Financial Goals</h3>
-                <div
-                    class="bg-white dark:bg-surface-dark rounded-2xl overflow-hidden shadow-soft border border-slate-100 dark:border-white/5 divide-y divide-slate-100 dark:divide-white/5">
-                    <!-- ── Monthly Income Row ────────────────────────────────────────────
-                         Clicking the row (#income-row) opens a prompt()
-                         dialog where the user can enter their monthly income.
-                         The value is saved to localStorage with setIncome()
-                         and displayed formatted as currency via #income-display.
-                    ─────────────────────────────────────────────────────────────── -->
-                    <div id="income-row"
-                        class="flex items-center gap-4 px-4 py-4 justify-between hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer transition-colors">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="size-8 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center">
-                                <span
-                                    class="material-symbols-outlined text-green-600 dark:text-green-400 text-[20px]">account_balance_wallet</span>
+                <!-- ── Column 2: Financial Goals (md:col-span-4) ──────────────── -->
+                <div class="md:col-span-4 flex flex-col gap-8">
+                    <div class="flex flex-col gap-4">
+                        <h3 class="text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] ml-2">Budgeting</h3>
+                        <div class="bg-white dark:bg-surface-dark rounded-3xl overflow-hidden shadow-soft border border-slate-100 dark:border-white/5">
+                            <div id="income-row" class="flex flex-col gap-4 p-6 hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer transition-colors group">
+                                <div class="flex items-center justify-between">
+                                    <div class="size-10 rounded-xl bg-green-100 dark:bg-green-900/40 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-[22px]">account_balance_wallet</span>
+                                    </div>
+                                    <span class="material-symbols-outlined text-slate-400 group-hover:rotate-12 transition-transform">edit</span>
+                                </div>
+                                <div>
+                                    <p class="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Monthly Income</p>
+                                    <p class="text-slate-900 dark:text-white text-2xl font-black" id="income-display">$0.00</p>
+                                </div>
                             </div>
-                            <div class="flex flex-col">
-                                <p class="text-slate-900 dark:text-white text-base font-medium truncate">Monthly Income
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <!-- Dynamic Income -->
-                            <span class="text-slate-900 dark:text-white font-bold" id="income-display">$4,000.00</span>
-                            <span class="material-symbols-outlined text-slate-400 text-[20px]">edit</span>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Data & Privacy -->
-            <div class="px-4 pt-6">
-                <h3
-                    class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider px-2 pb-2 ml-2">
-                    Data &amp; Privacy</h3>
-                <div
-                    class="bg-white dark:bg-surface-dark rounded-2xl overflow-hidden shadow-soft border border-slate-100 dark:border-white/5 divide-y divide-slate-100 dark:divide-white/5">
+                <!-- ── Column 3: Data & Account (md:col-span-4) ────────────────── -->
+                <div class="md:col-span-4 flex flex-col gap-8">
+                    <div class="flex flex-col gap-4">
+                        <h3 class="text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] ml-2">Data Management</h3>
+                        <div class="bg-white dark:bg-surface-dark rounded-3xl overflow-hidden shadow-soft border border-slate-100 dark:border-white/5 divide-y divide-slate-100 dark:divide-white/5">
+                            
+                            <!-- Export -->
+                            <button id="export-data-btn" class="w-full flex items-center gap-4 px-6 py-4 justify-between hover:bg-indigo-50 dark:hover:bg-indigo-900/20 group transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <div class="size-9 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-[20px]">download</span>
+                                    </div>
+                                    <p class="text-slate-900 dark:text-white text-sm font-bold">Export Activity</p>
+                                </div>
+                                <span class="material-symbols-outlined text-slate-400 group-hover:translate-x-1 transition-transform">chevron_right</span>
+                            </button>
 
-                    <!-- ── Reset Data Button ────────────────────────────────────────────
-                         Prompts a confirmation, then clears Vertex_expenses
-                         from localStorage. Theme and currency are KEPT.
-                         CAUTION: This action is irreversible.
-                    ─────────────────────────────────────────────────────────────── -->
-                    <button id="reset-data-btn"
-                        class="w-full flex items-center gap-4 px-4 py-4 justify-between hover:bg-red-50 dark:hover:bg-red-900/10 cursor-pointer transition-colors group text-left">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="size-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-                                <span
-                                    class="material-symbols-outlined text-red-600 dark:text-red-400 text-[20px]">delete_forever</span>
-                            </div>
-                            <p
-                                class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
-                                Reset All Data</p>
+                            <!-- Reset -->
+                            <button id="reset-data-btn" class="w-full flex items-center gap-4 px-6 py-4 justify-between hover:bg-red-50 dark:hover:bg-red-900/10 group transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <div class="size-9 rounded-xl bg-red-100 dark:bg-red-900/40 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-red-600 dark:text-red-400 text-[20px]">delete_forever</span>
+                                    </div>
+                                    <p class="text-slate-900 dark:text-white text-sm font-bold group-hover:text-red-600 transition-colors">Delete Data</p>
+                                </div>
+                                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+                            </button>
                         </div>
-                        <span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
-                    </button>
 
-                    <!-- ── Export Data Button ───────────────────────────────────────────
-                         Calls exportExpensesToExcel() from app.js which
-                         generates an HTML-table-based .xls file and
-                         triggers a download dialog via a Blob URL.
-                    ─────────────────────────────────────────────────────────────── -->
-                    <button id="export-data-btn"
-                        class="w-full flex items-center gap-4 px-4 py-4 justify-between hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer transition-colors text-left">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="size-8 rounded-full bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center">
-                                <span
-                                    class="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-[20px]">download</span>
-                            </div>
-                            <p class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate">Export
-                                Data
-                                (CSV)</p>
+                        <!-- Logout -->
+                        <button id="logout-btn" class="w-full flex items-center justify-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:scale-[1.02] active:scale-[0.98] font-black py-5 rounded-3xl transition-all shadow-xl shadow-slate-900/10 dark:shadow-white/5 mt-2">
+                            <span class="material-symbols-outlined text-[22px] font-bold">logout</span>
+                            Sign Out
+                        </button>
+                        
+                        <div class="flex flex-col items-center justify-center gap-2 mt-4 px-4 opacity-50">
+                            <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest">Version 1.0.42 • Made with Vertex</p>
                         </div>
-                        <span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="p-4 pt-8 pb-12 flex flex-col gap-4">
-                <button id="logout-btn"
-                    class="w-full flex items-center justify-center gap-2 bg-white dark:bg-surface-dark border border-slate-200 dark:border-white/10 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 font-bold py-4 rounded-xl transition-colors shadow-soft">
-                    <span class="material-symbols-outlined text-[20px]">logout</span>
-                    Log Out
-                </button>
-                <div class="flex flex-col items-center justify-center gap-1 mt-2">
-                    <p class="text-xs text-slate-400 text-center">Version 1.0.0 (Build 42)</p>
-                    <a class="text-xs text-primary hover:underline" href="#">Help &amp; Support</a>
+                    </div>
                 </div>
             </div>
         </main>
+
+        <!-- ── Income Modal ──────────────────────────────────────────────────
+             Shown when the user clicks the Monthly Income row.
+             Replaces the native prompt() which can be blocked by browsers.
+        ─────────────────────────────────────────────────────────────── -->
+        <div id="income-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+            <!-- Backdrop -->
+            <div id="income-modal-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+            <!-- Modal Card -->
+            <div class="relative bg-white dark:bg-surface-dark rounded-2xl shadow-2xl border border-slate-100 dark:border-white/10 p-6 w-full max-w-sm animate-enter">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="size-10 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-[20px]">account_balance_wallet</span>
+                    </div>
+                    <div>
+                        <p class="text-slate-900 dark:text-white font-bold text-base">Monthly Income</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs">Used to calculate your balance</p>
+                    </div>
+                </div>
+                <div class="relative mb-5">
+                    <span id="income-modal-symbol" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg">$</span>
+                    <input
+                        id="income-modal-input"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white font-bold text-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                    />
+                </div>
+                <div class="flex gap-3">
+                    <button id="income-modal-cancel"
+                        class="flex-1 py-3 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                        Cancel
+                    </button>
+                    <button id="income-modal-save"
+                        class="flex-1 py-3 rounded-xl bg-primary text-black font-bold hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Currency Modal ─────────────────────────────────────────────── -->
+        <div id="currency-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div id="currency-modal-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+            <div class="relative bg-white dark:bg-surface-dark rounded-3xl shadow-2xl border border-slate-100 dark:border-white/10 w-full max-w-sm overflow-hidden animate-enter">
+                <div class="p-6 border-b border-slate-100 dark:border-white/5">
+                    <h3 class="text-slate-900 dark:text-white font-black text-lg tracking-tight">Select Currency</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Choose your preferred currency symbol</p>
+                </div>
+                <div class="max-h-[60vh] overflow-y-auto no-scrollbar py-2">
+                    <button class="currency-option-btn w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" data-value="USD" data-text="USD ($)">
+                        <span class="text-slate-900 dark:text-white font-bold">USD ($)</span>
+                        <span class="material-symbols-outlined text-primary hidden check-icon">check_circle</span>
+                    </button>
+                    <button class="currency-option-btn w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" data-value="EUR" data-text="EUR (€)">
+                        <span class="text-slate-900 dark:text-white font-bold">EUR (€)</span>
+                        <span class="material-symbols-outlined text-primary hidden check-icon">check_circle</span>
+                    </button>
+                    <button class="currency-option-btn w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" data-value="GBP" data-text="GBP (£)">
+                        <span class="text-slate-900 dark:text-white font-bold">GBP (£)</span>
+                        <span class="material-symbols-outlined text-primary hidden check-icon">check_circle</span>
+                    </button>
+                    <button class="currency-option-btn w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" data-value="INR" data-text="INR (₹)">
+                        <span class="text-slate-900 dark:text-white font-bold">INR (₹)</span>
+                        <span class="material-symbols-outlined text-primary hidden check-icon">check_circle</span>
+                    </button>
+                    <button class="currency-option-btn w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" data-value="JPY" data-text="JPY (¥)">
+                        <span class="text-slate-900 dark:text-white font-bold">JPY (¥)</span>
+                        <span class="material-symbols-outlined text-primary hidden check-icon">check_circle</span>
+                    </button>
+                    <button class="currency-option-btn w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" data-value="CAD" data-text="CAD ($)">
+                        <span class="text-slate-900 dark:text-white font-bold">CAD ($)</span>
+                        <span class="material-symbols-outlined text-primary hidden check-icon">check_circle</span>
+                    </button>
+                    <button class="currency-option-btn w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" data-value="AUD" data-text="AUD ($)">
+                        <span class="text-slate-900 dark:text-white font-bold">AUD ($)</span>
+                        <span class="material-symbols-outlined text-primary hidden check-icon">check_circle</span>
+                    </button>
+                </div>
+                <div class="p-4 bg-slate-50 dark:bg-white/5">
+                    <button id="currency-modal-close" class="w-full py-3 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-xs uppercase tracking-widest transition-all active:scale-[0.98]">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- Navigation -->
         <nav
@@ -447,24 +479,50 @@
             });
 
             // Currency Logic
-            const currencySelect = document.getElementById('currency-select');
+            const currencyRow = document.getElementById('currency-row');
+            const currencyModal = document.getElementById('currency-modal');
             const currencyDisplay = document.getElementById('currency-display');
-            const storedCurrency = getCurrency();
+            const currencyOptionBtns = document.querySelectorAll('.currency-option-btn');
+            
+            function openCurrencyModal() {
+                const current = getCurrency();
+                currencyOptionBtns.forEach(btn => {
+                    if (btn.dataset.value === current) {
+                        btn.querySelector('.check-icon').classList.remove('hidden');
+                        btn.classList.add('bg-primary/5');
+                    } else {
+                        btn.querySelector('.check-icon').classList.add('hidden');
+                        btn.classList.remove('bg-primary/5');
+                    }
+                });
+                currencyModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
 
-            currencySelect.value = storedCurrency;
-            updateCurrencyText(storedCurrency);
+            function closeCurrencyModal() {
+                currencyModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
 
-            currencySelect.addEventListener('change', (e) => {
-                const newCurrency = e.target.value;
-                setCurrency(newCurrency);
-                updateCurrencyText(newCurrency);
+            currencyRow.addEventListener('click', openCurrencyModal);
+            document.getElementById('currency-modal-backdrop').addEventListener('click', closeCurrencyModal);
+            document.getElementById('currency-modal-close').addEventListener('click', closeCurrencyModal);
+
+            currencyOptionBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const newCurrency = btn.dataset.value;
+                    const newText = btn.dataset.text;
+                    setCurrency(newCurrency);
+                    currencyDisplay.textContent = newText;
+                    closeCurrencyModal();
+                    // Optional: show a small toast or just close
+                });
             });
 
-            function updateCurrencyText(code) {
-                // Find option text to display nicely
-                const option = Array.from(currencySelect.options).find(opt => opt.value === code);
-                if (option) currencyDisplay.textContent = option.text;
-            }
+            // Init currency display
+            const initialCurrency = getCurrency();
+            const initialBtn = Array.from(currencyOptionBtns).find(b => b.dataset.value === initialCurrency);
+            if (initialBtn) currencyDisplay.textContent = initialBtn.dataset.text;
 
             // Reset Logic
             document.getElementById('reset-data-btn').addEventListener('click', () => {
@@ -489,14 +547,39 @@
             }
             updateIncomeUI(); // Initial Load
 
-            document.getElementById('income-row').addEventListener('click', () => {
-                const currentIncome = getIncome();
-                const input = prompt("Enter your Monthly Income:", currentIncome);
+            // Income Modal Logic
+            const incomeModal = document.getElementById('income-modal');
+            const incomeModalInput = document.getElementById('income-modal-input');
+            const incomeModalSymbol = document.getElementById('income-modal-symbol');
 
-                if (input !== null && !isNaN(input) && input.trim() !== "") {
-                    setIncome(parseFloat(input));
+            function openIncomeModal() {
+                const current = getIncome();
+                incomeModalInput.value = current > 0 ? current : '';
+                incomeModalSymbol.textContent = getCurrencySymbol();
+                incomeModal.classList.remove('hidden');
+                setTimeout(() => incomeModalInput.focus(), 50);
+            }
+
+            function closeIncomeModal() {
+                incomeModal.classList.add('hidden');
+            }
+
+            function saveIncome() {
+                const val = incomeModalInput.value.trim();
+                if (val !== '' && !isNaN(val) && parseFloat(val) >= 0) {
+                    setIncome(parseFloat(val));
                     updateIncomeUI();
                 }
+                closeIncomeModal();
+            }
+
+            document.getElementById('income-row').addEventListener('click', openIncomeModal);
+            document.getElementById('income-modal-save').addEventListener('click', saveIncome);
+            document.getElementById('income-modal-cancel').addEventListener('click', closeIncomeModal);
+            document.getElementById('income-modal-backdrop').addEventListener('click', closeIncomeModal);
+            incomeModalInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') saveIncome();
+                if (e.key === 'Escape') closeIncomeModal();
             });
 
             // User Info

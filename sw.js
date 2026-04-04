@@ -21,8 +21,8 @@ const CACHE_NAME = 'Vertex-v6';
 // List of all files to pre-cache on install.
 // These assets will be available even when the user is offline.
 const ASSETS_TO_CACHE = [
-    '/',                                // Root (resolves to login.html)
-    '/login.html',                      // Entry point / auth page
+    '/',                                // Root (resolves to index.html)
+    '/index.html',                      // Entry point / auth page
     '/dashboard.html',                  // Main financial overview
     '/add_expense.html',                // Expense logging form
     '/history.html',                    // Full transaction history

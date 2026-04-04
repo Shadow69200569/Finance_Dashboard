@@ -1,7 +1,7 @@
 {
   "name": "Vertex Expense Tracker",
   "short_name": "Vertex",
-  "start_url": "login.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#050505",
