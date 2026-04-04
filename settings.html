@@ -1,4 +1,18 @@
 <!DOCTYPE html>
+<!-- ============================================================
+     Vertex Expense Tracker — Settings Page (settings.html)
+     ============================================================
+     User preferences and account management. Sections:
+
+       Profile         — Displays the logged-in username.
+       Preferences     — Currency selector, Dark Mode toggle.
+       Financial Goals — Monthly income (used for balance calculation).
+       Data & Privacy  — Reset all data, Export to .xls.
+       Logout          — Clears session and returns to login.
+
+     All changes are saved immediately to localStorage.
+     Layout: Mobile = single column. Desktop (md+) = sidebar + content.
+     ============================================================ -->
 <html class="light" lang="en">
 
 <head>
@@ -209,8 +223,12 @@
                 <div
                     class="bg-white dark:bg-surface-dark rounded-2xl overflow-hidden shadow-soft border border-slate-100 dark:border-white/5 divide-y divide-slate-100 dark:divide-white/5">
 
-                    <div
-                        class="flex items-center gap-4 px-4 py-4 justify-between hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer transition-colors relative">
+                    <!-- ── Currency Row ────────────────────────────────────────────────
+                         A styled row with a hidden <select> overlaid.
+                         The <select> is transparent (opacity-0) but covers
+                         the entire row so clicking anywhere opens the dropdown.
+                         The currently selected option is shown in #currency-display.
+                    ─────────────────────────────────────────────────────────────── -->
                         <div class="flex items-center gap-3">
                             <div
                                 class="size-8 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
@@ -275,6 +293,12 @@
                     Financial Goals</h3>
                 <div
                     class="bg-white dark:bg-surface-dark rounded-2xl overflow-hidden shadow-soft border border-slate-100 dark:border-white/5 divide-y divide-slate-100 dark:divide-white/5">
+                    <!-- ── Monthly Income Row ────────────────────────────────────────────
+                         Clicking the row (#income-row) opens a prompt()
+                         dialog where the user can enter their monthly income.
+                         The value is saved to localStorage with setIncome()
+                         and displayed formatted as currency via #income-display.
+                    ─────────────────────────────────────────────────────────────── -->
                     <div id="income-row"
                         class="flex items-center gap-4 px-4 py-4 justify-between hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer transition-colors">
                         <div class="flex items-center gap-3">
@@ -305,6 +329,11 @@
                 <div
                     class="bg-white dark:bg-surface-dark rounded-2xl overflow-hidden shadow-soft border border-slate-100 dark:border-white/5 divide-y divide-slate-100 dark:divide-white/5">
 
+                    <!-- ── Reset Data Button ────────────────────────────────────────────
+                         Prompts a confirmation, then clears Vertex_expenses
+                         from localStorage. Theme and currency are KEPT.
+                         CAUTION: This action is irreversible.
+                    ─────────────────────────────────────────────────────────────── -->
                     <button id="reset-data-btn"
                         class="w-full flex items-center gap-4 px-4 py-4 justify-between hover:bg-red-50 dark:hover:bg-red-900/10 cursor-pointer transition-colors group text-left">
                         <div class="flex items-center gap-3">
@@ -320,6 +349,11 @@
                         <span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
                     </button>
 
+                    <!-- ── Export Data Button ───────────────────────────────────────────
+                         Calls exportExpensesToExcel() from app.js which
+                         generates an HTML-table-based .xls file and
+                         triggers a download dialog via a Blob URL.
+                    ─────────────────────────────────────────────────────────────── -->
                     <button id="export-data-btn"
                         class="w-full flex items-center gap-4 px-4 py-4 justify-between hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer transition-colors text-left">
                         <div class="flex items-center gap-3">

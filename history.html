@@ -1,4 +1,17 @@
 <!DOCTYPE html>
+<!-- ============================================================
+     Vertex Expense Tracker — History Page (history.html)
+     ============================================================
+     Displays ALL stored expenses in reverse-chronological order.
+
+     Features:
+       - Full expense list with category icon, title, date, amount
+       - Delete button (appears on hover for each row)
+       - Empty state shown when no expenses exist
+
+     All data is read/written via helpers in js/app.js.
+     Layout: Mobile = single column. Desktop (md+) = sidebar + content.
+     ============================================================ -->
 <html class="light" lang="en">
 
 <head>
@@ -174,14 +187,21 @@
                 History</h2>
         </div>
 
-        <!-- Main Content -->
+        <!-- ── History List Container ────────────────────────────────────────
+             JS renders all expenses into #history-list as HTML strings.
+             Each row shows: icon, title, date, amount, delete button.
+             The delete button is 'invisible' until the row is hovered.
+        ─────────────────────────────────────────────────────────────── -->
         <main class="flex-1 overflow-y-auto no-scrollbar pb-24 animate-enter w-full max-w-3xl mx-auto md:pt-8 md:px-6">
             <!-- List Container -->
             <div id="history-list" class="flex flex-col gap-0 divide-y divide-slate-100 dark:divide-white/5">
                 <!-- Items injected by JS -->
             </div>
 
-            <!-- Empty State (Hidden by default) -->
+            <!-- ── Empty State ──────────────────────────────────────────────────
+                 Shown only when there are no expenses yet.
+                 JS replaces the #history-list innerHTML with this.
+            ─────────────────────────────────────────────────────────────── -->
             <div id="empty-state" class="hidden flex-col items-center justify-center py-20 opacity-50">
                 <span class="material-symbols-outlined text-6xl mb-4">history_toggle_off</span>
                 <p class="text-sm font-bold">No transactions yet</p>
@@ -225,6 +245,12 @@
         </div> <!-- End Mobile Content Wrapper -->
     </div>
 
+    <!-- ── Scripts ──────────────────────────────────────────────────
+         app.js provides: getExpenses, deleteExpense, formatCurrency,
+         formatDate, and the global auth guard.
+         renderHistory() builds the HTML for each expense row.
+         handleDelete() confirms and removes an item by its ID.
+    ──────────────────────────────────────────────────────────── -->
     <script src="js/app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {

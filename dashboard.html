@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+<!-- ============================================================
+     Vertex Expense Tracker — Dashboard (dashboard.html)
+     ============================================================
+     The main screen after login. Dynamically renders:
+       - Balance card (Income − Total Expenses)
+       - Weekly spending bar chart (last 7 days, grouped by weekday)
+       - Recent transactions list (newest 5 expenses)
+
+     All data is read from localStorage via helpers in js/app.js.
+     Layout: Mobile = single column. Desktop (md+) = sidebar + content.
+     ============================================================ -->
 <html class="light" lang="en">
 
 <head>
@@ -90,6 +101,10 @@
             view-transition-name: main-content;
         }
     </style>
+    <!-- ── Theme Init (runs before body renders to avoid flash of wrong theme) --
+    Theme preference is saved to 'Vertex_theme' in localStorage.
+    We apply it immediately here so there is NO flash of unstyled content.
+    Defaults to the OS preference (prefers-color-scheme) if no saved value. -->
     <script>
         if (localStorage.getItem('Vertex_theme') === 'dark' || (!('Vertex_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -172,7 +187,11 @@
         <main class="flex-1 overflow-y-auto no-scrollbar scroll-smooth animate-enter pb-24 px-6 pt-4 md:pt-10 md:px-10 max-w-5xl md:mx-auto w-full">
 
             <div class="md:grid md:grid-cols-3 md:gap-8 mb-8">
-            <!-- Total Balance Card -->
+        <!-- ── Balance Card ────────────────────────────────────────────────
+             Shows: Total Balance (Income - Expenses), Income, and Expenses.
+             Values are injected by JS on DOMContentLoaded.
+             IDs: #total-balance, #total-income, #total-expense
+        ─────────────────────────────────────────────────────────────────── -->
             <div class="w-full bg-primary/10 dark:bg-primary/5 rounded-2xl p-6 mb-6 md:mb-0 md:col-span-1 relative overflow-hidden group hover:scale-[1.01] hover:shadow-lg transition-all duration-500 ease-out cursor-default">
                 <div class="absolute -right-6 -top-6 w-32 h-32 bg-primary/20 rounded-full blur-2xl"></div>
                 <div class="relative z-10 flex flex-col items-center text-center">
@@ -208,7 +227,14 @@
                 </div>
             </div>
 
-            <!-- Spending Analytics -->
+            <!-- ── Spending Analytics (Weekly Bar Chart) ──────────────────────
+                 A bar chart of spending per weekday (Mon – Sun).
+                 Bars are HTML divs rendered dynamically by JS.
+                 The bars are scaled proportionally to the max daily spend.
+                 Today's bar is highlighted in the primary green color.
+                 Hovering a bar reveals a tooltip with the exact total.
+                 Container ID: #graph-bars (JS injects HTML into this)
+            ─────────────────────────────────────────────────────────────── -->
             <div class="p-6 py-4 md:bg-white md:dark:bg-surface-dark md:rounded-3xl md:shadow-soft md:border md:border-slate-100 md:dark:border-white/5 md:mb-0 hover:shadow-lg hover:-translate-y-1 transition-all duration-500 ease-out md:col-span-2">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-slate-900 dark:text-white text-lg font-bold">Spending Analysis</h3>
@@ -226,7 +252,11 @@
             </div>
             </div> <!-- End md:grid -->
 
-            <!-- Recent Transactions -->
+            <!-- ── Recent Transactions ──────────────────────────────────────
+                 Shows the 5 most recent expenses, sorted newest first.
+                 Each row: category icon, title, date, amount.
+                 Container ID: #recent-transactions-list (JS injects HTML)
+            ─────────────────────────────────────────────────────────────── -->
             <div class="flex flex-col gap-4">
                 <h3 class="text-slate-900 dark:text-white text-lg font-bold px-6">Recent Transactions</h3>
                 <div id="recent-transactions-list" class="flex flex-col gap-3 px-6">
@@ -235,7 +265,11 @@
             </div>
         </main>
 
-        <!-- Navigation -->
+        <!-- ── Mobile Bottom Navigation Bar ──────────────────────────────
+             Only visible on small screens (md:hidden).
+             On desktop, the sidebar `<aside>` serves as navigation.
+             'Home' tab is active (filled icon + primary color).
+        ─────────────────────────────────────────────────────────────────── -->
         <nav
             class="md:hidden fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 dark:bg-surface-dark/90 backdrop-blur-lg border-t border-slate-100 dark:border-slate-800 py-3 px-6 pb-6 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] z-20">
             <ul class="flex justify-between items-center">
@@ -272,6 +306,11 @@
         </div> <!-- End Mobile Content Wrapper -->
     </div>
 
+    <!-- ── Scripts ──────────────────────────────────────────────────
+         app.js is loaded first (provides auth guard + data helpers).
+         The inline script below reads from localStorage via those
+         helpers and populates the dashboard UI on DOMContentLoaded.
+    ──────────────────────────────────────────────────────────── -->
     <script src="js/app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
