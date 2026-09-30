@@ -143,4 +143,6 @@ Vertex is optimized for deployment on modern static hosting platforms like **Net
 
 ---
 
+For Live preview: https://thevertex-finance.netlify.app/
+
 > Built with ❤️ — Your financial data never leaves your device.
